@@ -18,15 +18,17 @@
 	<script src="scripts/before-form.js"></script>
 	<script src="scripts/before-modal.js"></script>
 	<script src="scripts/before-hero.js"></script>
+  <script src="scripts/before-newsletter.js"></script>
+  <script src="scripts/before-autocomplete.js"></script>
 </head>
 <body>
+  
   <div id="content">
     <div id="banner" class="container clearfix">
       <nav aria-label="version" class="float-right">
         <span class="float-left">Examples:</span>
         <ul class="utility-menu float-left list-unstyled">
           <li><a href="before_u.html" aria-current="page" aria-label="before version with problems">Before</a></li>
-          <li><a href="after_u.html" aria-label="after version with fixes">After</a></li>
         </ul>
       </nav>
       <a class="logo-link" href="/">
@@ -94,6 +96,18 @@
         </div>
       </div>
     </div>
+    
+    <!-- Hero Video Section (Inaccessible, Shortened Height) -->
+    <div class="container-fluid p-0" style="position: relative; overflow: hidden; height: 300px;">
+      <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="p-5 text-white" style="position: absolute; top: 20%; left: 10%;">
+        <h1>Welcome to Accessible University</h1>
+        <p>Can you spot the accessibility barriers?</p>
+      </div>
+    </div>
 
     <br/>
     <div class="container">
@@ -144,11 +158,16 @@
               </p>
 
               <div class="heading">Can you spot the barriers?</div>
-              <p><img style="float:left;max-width:200px;margin-right:10px" src="images/8675309-block.jpg"/> There are at least 18 accessibility issues on this page.
-                To see a list of all known issues, <a href="issues.html">click here</a>.
-                To see a more accessible version of this same page, <a href="after_u.html">click here</a>.
+              <p><img style="float:left;max-width:200px;margin-right:10px" src="images/8675309-block.jpg"/> There are at least 25 accessibility issues on this page.
                 To view a popup list of accessibility issues:</p>
-                <a class="btn btn-primary" href="cheatsheet.html">click here</a>
+                <a href="#"
+                  onclick="
+                    document.getElementById('modalContainer').style.display='block';
+                    document.getElementById('content').setAttribute('aria-hidden', 'true');
+                    return false;">
+                  Click here
+                </a>
+
 
               <div class="heading">AU Enrollment Trends</div>
               <table id="enrollment" class="table">
@@ -290,6 +309,144 @@
         </div>
     </div>
 
+    <!-- Broken Autocomplete Section -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col">
+          <h2>Search for a Department</h2>
+          <input type="text" id="dept-autocomplete" class="form-control"
+            placeholder="Start typing (e.g. Bio, Eng)" oninput="filterDepartments()" autocomplete="off">
+          <ul id="dept-list" class="list-group mt-2" style="display: none;"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Broken Focus Order Using Positive Tabindex -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col">
+          <h2>Featured Links</h2>
+          <a href="https://example.com" tabindex="3">Third</a><br>
+          <a href="https://example.com" tabindex="1">First</a><br>
+          <a href="https://example.com" tabindex="2">Second</a><br>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Newsletter Sign-Up Section -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col">
+          <h2>Sign Up for Our Newsletter</h2>
+          <form id="newsletter-form">
+            <div class="form-group">
+              <input type="text" name="name" placeholder="Your Name"
+                class="form-control" style="color: #ccc; background-color: #f9f9f9; border: 1px solid #f9f9f9;">
+            </div>
+            <div class="form-group mt-3">
+              <input type="email" name="email" placeholder="Your Email"
+                class="form-control" style="color: #ccc; background-color: #f9f9f9; border: 1px solid #f9f9f9;">
+            </div>
+            <button type="submit" id="newsletter-submit" class="btn btn-primary mt-3">
+              Sign Up
+            </button>
+            <div id="newsletter-errors" class="mt-2" style="color: red; display: none;">
+              There was a problem with your submission.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- WCAG 1.3.2 Meaningful Sequence Failure: Program Snapshot -->
+    <div class="container mt-5">
+      <h2>Program Snapshot</h2>
+      <div class="row">
+
+        <!-- 1. DOM-first but visually last & logically references unseen content -->
+        <div class="col-md-4 order-md-3">
+          <p>
+            “I didn’t believe it until I saw the lab,” says alumni Jamie—refer back to the image below for clarity.
+          </p>
+        </div>
+
+        <!-- 2. DOM-second but visually first: image appears left -->
+        <div class="col-md-4 order-md-1 text-center">
+          <img src="images/lab.avif"
+              alt="Students working with microscopes in a biology lab" class="img-fluid mb-2">
+          <p><em>Collaborative practice in Accessible University’s biology lab.</em></p>
+        </div>
+
+        <!-- 3. DOM-third but visually second: description that logically belongs first -->
+        <div class="col-md-4 order-md-2">
+          <p>
+            AU’s Biology program enables real-world experimental learning with hands-on research and teamwork.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Inaccessible Disclosure Toggle -->
+    <div class="container mt-5">
+      <h2>Frequently Asked Question</h2>
+      <div id="faq-toggle" onclick="document.getElementById('faq-answer').classList.toggle('d-none');"
+          style="cursor: pointer; padding: 1rem; border: 1px solid #ccc; background: #f0f0f0;">
+        What are the lab requirements for biology students?
+      </div>
+      <div id="faq-answer" class="d-none" style="padding: 1rem; border: 1px solid #ccc; border-top: none;">
+        Students must complete 3 hands-on lab courses, which include live research experience and a capstone project.
+      </div>
+    </div>
+
+
+    <!-- Block Link Cards Section (Broken Semantics and A11y) -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-12">
+          <h2>Explore Our Programs</h2>
+        </div>
+
+        <!-- Card 1 -->
+        <div class="col-md-4 mb-4">
+          <a href="program-detail.html"
+            class="card h-100 p-3 text-dark text-decoration-none d-block"
+            aria-label="Click to see details">
+            <img src="https://via.placeholder.com/150" alt="program image" class="img-fluid mb-2">
+            <div style="font-size: 1.2rem; font-weight: bold;">Biology</div>
+            <p>Learn about organisms and ecosystems in a thrilling academic journey.</p>
+            <a href="program-detail.html">Read more</a>
+          </a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4 mb-4">
+          <a href="program-detail.html"
+            class="card h-100 p-3 text-dark text-decoration-none d-block"
+            aria-label="Click to see details">
+            <img src="https://via.placeholder.com/150" alt="program image" class="img-fluid mb-2">
+            <div style="font-size: 1.2rem; font-weight: bold;">Engineering</div>
+            <p>Design and innovate systems that shape the world.</p>
+            <a href="program-detail.html">Read more</a>
+          </a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4 mb-4">
+          <a href="program-detail.html"
+            class="card h-100 p-3 text-dark text-decoration-none d-block"
+            aria-label="Click to see details">
+            <img src="https://via.placeholder.com/150" alt="program image" class="img-fluid mb-2">
+            <div style="font-size: 1.2rem; font-weight: bold;">Literature</div>
+            <p>Analyze timeless texts, authors, and narrative forms.</p>
+            <a href="program-detail.html">Read more</a>
+          </a>
+        </div>
+      </div>
+    </div>
+
     <div id="footer">
       <div class="main-footer p-5">
         <div class="container">
@@ -321,34 +478,88 @@
   <!--containers for displaying modal content-->
   <div id="modalMask"></div>
 
-  <div id="modalContent">
-    <div class="modalHeading">List of accessibility issues</div>
-    <button type="button" id="modalXButton">x</button>
-    <p>Note: This popup does not receive keyboard focus. The cursor continues to tab down the page behind the it. As a result keyboard-only users cannot dismiss it and screen reader users will not be alerted to it's presence. They will not be able to close it; rendering the webpage useless.</p>
-    <p>On the inaccessible version of this page the following errors can be found:</p>
-    <ol>
-      <li>Missing bypass block <br>(skip-to main content).</li>
-      <li>Improper use of headings</li>
-      <li>Images of text</li>
-      <li>No alternate text on informative images</li>
-      <li>Missing or excessive alternate text on decorative images</li>
-      <li>Insufficient color contrast</li>
-      <li>Insufficient visual cues</li>
-      <li>Inaccessible dropdown menu</li>
-      <li>Redundant, uninformative link text</li>
-      <li>Color used to communicate information</li>
-      <li>Language not specified</li>
-      <li>Missing accessible form markup</li>
-      <li>Inaccessible CAPTCHA</li>
-      <li>Inaccessible validation</li>
-      <li>Missing ARIA landmark roles</li>
-      <li>Inaccessible modal window</li>
-      <li>Inaccessible carousel</li>
-      <li>Missing accessible table markup</li>
-      <li>HTML fails validation</li>
-    </ol>
-    <button class="btn btn-primary" type="button" id="modalOkButton">OK</button>
+  <!-- Inaccessible Modal Container -->
+  <!-- Inaccessible Modal Container -->
+  <div id="modalContainer" style="
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 90%;
+    max-width: 800px;
+    background: white;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    overflow-y: auto;
+    max-height: 80vh;
+  ">
+
+    <!-- Unlabeled Close Button -->
+    <button onclick="document.getElementById('modalContainer').style.display='none';"
+            style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.5rem;">
+      &times;
+    </button>
+
+    <!-- Unstructured Modal Content -->
+    <div style="margin-top: 2rem;">
+      <div style="font-weight: bold; font-size: 1.2rem;">List of Accessibility Issues</div>
+      <ul style="margin-top: 1rem;">
+        <li>Missing <code>lang</code> attribute on <code>&lt;html&gt;</code></li>
+        <li>No ARIA or HTML5 landmarks like <code>&lt;main&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code></li>
+        <li>No <code>&lt;h1&gt;</code>; headings are visually styled but semantically incorrect</li>
+        <li>Event dates incorrectly marked as headings</li>
+        <li>Low contrast text in footer, nav, buttons, and forms</li>
+        <li>Viewport prevents zooming or scaling</li>
+        <li>No "Skip to main content" link</li>
+        <li>Logo and links lack accessible names</li>
+        <li>Navigation menus not keyboard operable, open only on hover</li>
+        <li>Search input uses placeholder as label, and button is unlabeled</li>
+        <li>Images missing or using bad alternative text</li>
+        <li>Carousel lacks roles, keyboard focus, or visual state indicators</li>
+        <li>Carousel controls have poor contrast, no accessible names</li>
+        <li>Text embedded in images, unreadable at zoom</li>
+        <li>Focus indicators removed using <code>outline: none</code></li>
+        <li>Links and buttons rely on color alone</li>
+        <li>Ambiguous "click here" links and buttons</li>
+        <li>Interactive elements have no visible focus</li>
+        <li>Form fields not associated with labels</li>
+        <li>Required fields not marked visually or programmatically</li>
+        <li>No autocomplete attributes for personal fields</li>
+        <li>No feedback when submitting invalid forms</li>
+        <li>CAPTCHA is visual-only</li>
+        <li>Checkboxes not grouped or labeled</li>
+        <li>Error messages not announced or associated with fields</li>
+        <li>Empty <code>&lt;div&gt;</code> with invalid ARIA used</li>
+        <li>Footer links like “FB” and “TW” are not descriptive</li>
+        <li>Empty Twitter links in the footer</li>
+        <li>Decorative images have alt text like "horizontal line"</li>
+        <li><code>&lt;hr&gt;</code> elements are not hidden from screen readers</li>
+        <li>Footer list structure is broken (nested links not inside <code>&lt;li&gt;</code>)</li>
+        <li>Page layout breaks at 200% zoom</li>
+        <li>Mobile users must scroll both horizontally and vertically</li>
+        <li>Mobile menu toggle not keyboard operable or labeled</li>
+        <li>Autocomplete field has no ARIA roles or feedback</li>
+        <li>Newsletter form has disappearing labels, poor contrast, and no error handling</li>
+        <li>Autoplaying hero video cannot be paused or described</li>
+        <li>Dialog itself has no role, heading, label, or focus trap</li>
+        <li>Block links wrap full cards and use redundant labels</li>
+        <li>Use of positive <code>tabindex</code> values causes illogical keyboard focus order</li>
+        <li>DOM order does not match visual layout, confusing screen reader users</li>
+        <li><code>aria-hidden</code> is misused and not removed when modals close</li>
+        <li>Tabs, filters, and disclosures lack ARIA state indicators like <code>aria-expanded</code>, <code>aria-current</code></li>
+        <li>Disclosure toggles use non-semantic elements like <code>&lt;div&gt;</code> instead of buttons</li>
+        <li>Dynamic content updates (e.g. autocomplete suggestions) are not announced to screen readers</li>
+        <li>Filters or select inputs trigger full page reloads, disrupting focus and orientation</li>
+
+      </ul>
+    </div>
   </div>
+
+
+
 
   <div id="footer" role="bottom" aria-foo="yes"><span>.</div>
 
